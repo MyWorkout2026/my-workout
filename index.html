@@ -181,7 +181,7 @@ Lägg till
 <script>
 
 let workouts = JSON.parse(localStorage.getItem("myworkout")) || [];
-
+let workoutActive = false;
 function saveWorkout(){
 
 const exercise = document.getElementById("exercise").value;
@@ -333,8 +333,69 @@ machine
 document.getElementById(
 "newMachine"
 ).value = "";
+}
+document.getElementById("startWorkout")
+.onclick = function(){
+
+workoutActive = true;
+
+alert("Pass startat 💪");
+
+};
+
+document.getElementById("endWorkout")
+.onclick = function(){
+
+if(workoutActive){
+
+let total =
+Number(localStorage.getItem("totalPass")) || 0;
+
+total++;
+
+localStorage.setItem("totalPass", total);
+
+document.getElementById("total").innerText =
+total;
+
+workoutActive = false;
+
+alert("Pass avslutat ✅");
 
 }
+
+}; 
+document.getElementById("startWorkout")
+.onclick = function(){
+
+workoutActive = true;
+
+alert("Pass startat 💪");
+
+};
+
+document.getElementById("endWorkout")
+.onclick = function(){
+
+if(workoutActive){
+
+let total =
+Number(localStorage.getItem("totalPass")) || 0;
+
+total++;
+
+localStorage.setItem("totalPass", total);
+
+document.getElementById("total").innerText =
+total;
+
+workoutActive = false;
+
+alert("Pass avslutat ✅");
+
+}
+
+};  
 </script>
 
 </body>
