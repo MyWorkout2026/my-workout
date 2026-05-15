@@ -395,37 +395,7 @@ alert("Pass avslutat ✅");
 }
 
 }; 
-document.getElementById("startWorkout")
-.onclick = function(){
 
-workoutActive = true;
-
-alert("Pass startat 💪");
-
-};
-
-document.getElementById("endWorkout")
-.onclick = function(){
-
-if(workoutActive){
-
-let total =
-Number(localStorage.getItem("totalPass")) || 0;
-
-total++;
-
-localStorage.setItem("totalPass", total);
-
-document.getElementById("total").innerText =
-total;
-
-workoutActive = false;
-
-alert("Pass avslutat ✅");
-
-}
-
-};  
 </script>
 
 </body>
