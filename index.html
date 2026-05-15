@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Workout</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:#111827;
+color:white;
+}
+
+header{
+padding:30px 20px;
+font-size:32px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:#1f2937;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+margin-top:10px;
+margin-bottom:15px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:16px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:14px;
+font-size:16px;
+font-weight:bold;
+}
+
+.stat{
+font-size:28px;
+font-weight:bold;
+}
+
+.small{
+color:#9ca3af;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+My Workout
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Logga pass</h2>
+
+<input type="text" id="exercise" placeholder="Övning">
+
+<input type="number" id="weight" placeholder="Vikt kg">
+
+<input type="number" id="reps" placeholder="Reps">
+
+<button onclick="saveWorkout()">Spara</button>
+
+</div>
+
+<div class="card">
+
+<div class="small">Antal pass</div>
+<div class="stat" id="total">0</div>
+
+</div>
+
+<div class="card">
+
+<h2>Framsteg</h2>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+</div>
+
+<script>
+
+let workouts = JSON.parse(localStorage.getItem("myworkout")) || [];
+
+function saveWorkout(){
+
+const exercise = document.getElementById("exercise").value;
+const weight = Number(document.getElementById("weight").value);
+const reps = Number(document.getElementById("reps").value);
+
+if(!exercise || !weight || !reps){
+alert("Fyll i allt");
+return;
+}
+
+workouts.push({
+exercise,
+weight,
+reps,
+date:new Date().toLocaleDateString()
+});
+
+localStorage.setItem("myworkout", JSON.stringify(workouts));
+
+render();
+
+}
+
+function render(){
+
+document.getElementById("total").innerText = workouts.length;
+
+const labels = workouts.map(w=>w.date);
+const data = workouts.map(w=>w.weight);
+
+const ctx = document.getElementById("chart");
+
+if(window.chart){
+window.chart.destroy();
+}
+
+window.chart = new Chart(ctx,{
+type:'line',
+data:{
+labels:labels,
+datasets:[{
+label:'Viktutveckling',
+data:data
+}]
+}
+});
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
