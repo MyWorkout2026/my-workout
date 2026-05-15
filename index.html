@@ -152,7 +152,7 @@ Lägg till
 <option>Annan övning</option>
 
 </select>
-<select id="exercise">
+<select id="exercise" onchange="loadExerciseData()">
 
 <option value="">Välj övning</option>
 
@@ -225,7 +225,14 @@ const exercise = document.getElementById("exercise").value;
 const weight = Number(document.getElementById("weight").value);
 const reps = Number(document.getElementById("reps").value);
 const sets = Number(document.getElementById("sets").value);
-
+localStorage.setItem(
+  exercise,
+  JSON.stringify({
+    weight: weight,
+    reps: reps,
+    sets: sets
+  })
+);
 if(!exercise || !weight || !reps || !sets){
 alert("Fyll i alla fält");
 return;
@@ -315,6 +322,29 @@ ${w.weight} kg × ${w.reps} reps × ${w.sets} set
 }
 
 render();
+function loadExerciseData() {
+
+  const exercise =
+    document.getElementById("exercise").value;
+
+  const saved =
+    localStorage.getItem(exercise);
+
+  if(saved){
+
+    const data = JSON.parse(saved);
+
+    document.getElementById("weight").value =
+      data.weight || "";
+
+    document.getElementById("reps").value =
+      data.reps || "";
+
+    document.getElementById("sets").value =
+      data.sets || "";
+  }
+}
+  
 function addMachine(){
 
 const machine =
