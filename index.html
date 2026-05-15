@@ -114,7 +114,11 @@ My Workout
 <div class="card">
 
 <h2>Logga pass</h2>
+<input type="text" id="newMachine" placeholder="Lägg till maskin">
 
+<button onclick="addMachine()">
+Lägg till
+</button>
 
 
 
@@ -306,7 +310,33 @@ ${w.weight} kg × ${w.reps} reps × ${w.sets} set
 }
 
 render();
+function addMachine(){
 
+const machine =
+document.getElementById("newMachine").value;
+
+if(machine === "") return;
+
+const select =
+document.getElementById("exercise");
+
+const option =
+document.createElement("option");
+
+option.text = machine;
+
+select.add(option);
+
+localStorage.setItem(
+machine,
+machine
+);
+
+document.getElementById(
+"newMachine"
+).value = "";
+
+}
 </script>
 
 </body>
