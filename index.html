@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>My Workout</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,14 +14,15 @@
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:#111827;
+background:#0f172a;
 color:white;
+padding-bottom:40px;
 }
 
 header{
-padding:30px 20px;
-font-size:32px;
-font-weight:bold;
+padding:30px 20px 10px;
+font-size:34px;
+font-weight:700;
 }
 
 .container{
@@ -27,40 +30,73 @@ padding:20px;
 }
 
 .card{
-background:#1f2937;
+background:#1e293b;
 padding:20px;
-border-radius:20px;
+border-radius:22px;
 margin-bottom:20px;
+}
+
+h2{
+margin-top:0;
 }
 
 input{
 width:100%;
-padding:15px;
+padding:16px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 margin-top:10px;
-margin-bottom:15px;
-font-size:16px;
+margin-bottom:14px;
+font-size:17px;
+box-sizing:border-box;
 }
 
 button{
 width:100%;
-padding:16px;
+padding:18px;
 background:#2563eb;
 color:white;
 border:none;
-border-radius:14px;
-font-size:16px;
+border-radius:16px;
+font-size:17px;
 font-weight:bold;
 }
 
+button:active{
+transform:scale(0.98);
+}
+
 .stat{
-font-size:28px;
+font-size:34px;
 font-weight:bold;
 }
 
 .small{
-color:#9ca3af;
+color:#94a3b8;
+margin-bottom:8px;
+}
+
+.success{
+margin-top:14px;
+color:#4ade80;
+font-weight:bold;
+display:none;
+}
+
+.history-item{
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.history-item:last-child{
+border-bottom:none;
+}
+
+.latest{
+background:#0f172a;
+padding:14px;
+border-radius:14px;
+margin-bottom:18px;
 }
 
 </style>
@@ -79,13 +115,23 @@ My Workout
 
 <h2>Logga pass</h2>
 
+<div class="latest" id="latestWorkout">
+Ingen tidigare övning
+</div>
+
 <input type="text" id="exercise" placeholder="Övning">
 
 <input type="number" id="weight" placeholder="Vikt kg">
 
 <input type="number" id="reps" placeholder="Reps">
 
+<input type="number" id="sets" placeholder="Set">
+
 <button onclick="saveWorkout()">Spara</button>
+
+<div class="success" id="successMessage">
+✓ Sparat
+</div>
 
 </div>
 
@@ -104,6 +150,14 @@ My Workout
 
 </div>
 
+<div class="card">
+
+<h2>Historik</h2>
+
+<div id="history"></div>
+
+</div>
+
 </div>
 
 <script>
@@ -115,20 +169,37 @@ function saveWorkout(){
 const exercise = document.getElementById("exercise").value;
 const weight = Number(document.getElementById("weight").value);
 const reps = Number(document.getElementById("reps").value);
+const sets = Number(document.getElementById("sets").value);
 
-if(!exercise || !weight || !reps){
-alert("Fyll i allt");
+if(!exercise || !weight || !reps || !sets){
+alert("Fyll i alla fält");
 return;
 }
 
-workouts.push({
+const workout = {
 exercise,
 weight,
 reps,
+sets,
 date:new Date().toLocaleDateString()
-});
+};
+
+workouts.push(workout);
 
 localStorage.setItem("myworkout", JSON.stringify(workouts));
+
+document.getElementById("exercise").value = "";
+document.getElementById("weight").value = "";
+document.getElementById("reps").value = "";
+document.getElementById("sets").value = "";
+
+const success = document.getElementById("successMessage");
+
+success.style.display = "block";
+
+setTimeout(()=>{
+success.style.display = "none";
+},1500);
 
 render();
 
@@ -138,8 +209,21 @@ function render(){
 
 document.getElementById("total").innerText = workouts.length;
 
-const labels = workouts.map(w=>w.date);
-const data = workouts.map(w=>w.weight);
+const latest = workouts[workouts.length - 1];
+
+if(latest){
+
+document.getElementById("latestWorkout").innerHTML =
+`
+Senast:<br><br>
+<strong>${latest.exercise}</strong><br>
+${latest.weight} kg × ${latest.reps} reps × ${latest.sets} set
+`;
+
+}
+
+const labels = workouts.map(w => w.date);
+const data = workouts.map(w => w.weight);
 
 const ctx = document.getElementById("chart");
 
@@ -156,6 +240,21 @@ label:'Viktutveckling',
 data:data
 }]
 }
+});
+
+const history = document.getElementById("history");
+
+history.innerHTML = "";
+
+workouts.slice().reverse().forEach(w=>{
+
+history.innerHTML += `
+<div class="history-item">
+<strong>${w.exercise}</strong><br>
+${w.weight} kg × ${w.reps} reps × ${w.sets} set
+</div>
+`;
+
 });
 
 }
