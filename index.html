@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="sv">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>MyWorkout V2</title>
+
+<style>
+
+body{
+margin:0;
+background:#0b1320;
+color:white;
+font-family:-apple-system,sans-serif;
+}
+
+header{
+padding:30px;
+text-align:center;
+}
+
+.card{
+background:#152238;
+margin:14px;
+padding:20px;
+border-radius:20px;
+}
+
+button{
+width:100%;
+padding:18px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:bold;
+margin-top:10px;
+cursor:pointer;
+}
+
+.start{
+background:#0ea85d;
+color:white;
+}
+
+.stop{
+background:#d73d3d;
+color:white;
+}
+
+.save{
+background:#2563eb;
+color:white;
+}
+
+input,select{
+width:100%;
+padding:16px;
+border-radius:12px;
+border:none;
+margin-top:10px;
+box-sizing:border-box;
+}
+
+.timer{
+font-size:46px;
+text-align:center;
+margin-top:20px;
+}
+
+.history{
+max-height:300px;
+overflow:auto;
+}
+
+.small{
+opacity:.7;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>🏋️ MyWorkout V2</h1>
+<div id="today"></div>
+</header>
+
+<div class="card">
+
+<button class="start">
+🟢 Starta pass
+</button>
+
+<button class="stop">
+🔴 Avsluta pass
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Logga träning</h2>
+
+<input
+placeholder="Lägg till maskin">
+
+<select>
+
+<option>
+Mina maskiner
+</option>
+
+</select>
+
+<input
+value="10"
+placeholder="Reps">
+
+<input
+value="3"
+placeholder="Set">
+
+<input
+placeholder="Vikt">
+
+<button class="save">
+
+Spara träning
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Paus</h2>
+
+<select>
+
+<option>
+10 sek
+</option>
+
+<option>
+30 sek
+</option>
+
+<option>
+60 sek
+</option>
+
+</select>
+
+<div class="timer">
+
+00
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Historik</h2>
+
+<div class="history">
+
+Ingen historik ännu
+
+</div>
+
+</div>
+
+</body>
+
+</html>
