@@ -175,7 +175,36 @@ Ingen historik ännu
 </div>
 
 </div>
+<script>
 
+document.getElementById("today").innerText=
+new Date().toLocaleDateString("sv-SE");
+
+let workoutActive=false;
+
+document.querySelector(".start")
+.onclick=function(){
+
+workoutActive=true;
+
+alert("Pass startat 💪");
+
+};
+
+document.querySelector(".stop")
+.onclick=function(){
+
+if(workoutActive){
+
+alert("Pass avslutat ✅");
+
+workoutActive=false;
+
+}
+
+};
+
+</script>
 </body>
 
 </html>
