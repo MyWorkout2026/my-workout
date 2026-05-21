@@ -203,7 +203,43 @@ workoutActive=false;
 }
 
 };
+document.querySelector(".save").onclick=function(){
 
+alert("Träning sparad ✅");
+
+};
+
+document.querySelector("select").onchange=function(){
+
+alert("Maskin vald 🏋️");
+
+};
+
+let timer=document.querySelector(".timer");
+
+document.querySelector(".start").addEventListener("click",function(){
+
+let sek=10;
+
+timer.innerText=sek;
+
+let intervall=setInterval(function(){
+
+sek--;
+
+timer.innerText=sek;
+
+if(sek<=0){
+
+clearInterval(intervall);
+
+alert("Paus slut 🔔");
+
+}
+
+},1000);
+
+});
 </script>
 </body>
 
