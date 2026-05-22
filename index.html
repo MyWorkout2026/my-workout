@@ -197,8 +197,9 @@ JSON.parse(localStorage.getItem("maskiner")||"[]");
 function sparaMaskin(){
 
 let namn=
-prompt("Maskinnamn");
-
+document.querySelector(
+'input[placeholder="Lägg till maskin"]'
+).value;
 if(!namn)return;
 
 let data={
