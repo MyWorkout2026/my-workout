@@ -260,6 +260,113 @@ box.innerHTML+=`
 }
 
 visaHistorik();
+  const MASKIN_KEY="myworkout_maskiner";
+
+let historik=
+JSON.parse(
+localStorage.getItem(MASKIN_KEY)
+||"{}"
+);
+
+function sparaTraning(){
+
+let maskin=
+document.querySelector(
+'input[placeholder="Lägg till maskin"]'
+)?.value;
+
+let reps=
+document.querySelector(
+'input[placeholder="Reps"]'
+)?.value||10;
+
+let set=
+document.querySelector(
+'input[placeholder="Set"]'
+)?.value||3;
+
+let vikt=
+document.querySelector(
+'input[placeholder="Vikt"]'
+)?.value||"";
+
+if(!maskin){
+alert("Skriv maskin");
+return;
+}
+
+historik[maskin]={
+reps,
+set,
+vikt,
+datum:
+new Date()
+.toLocaleDateString(
+"sv-SE"
+)
+};
+
+localStorage.setItem(
+MASKIN_KEY,
+JSON.stringify(historik)
+);
+
+visaHistorik();
+
+alert("Sparat ✅");
+
+}
+
+function visaHistorik(){
+
+let ruta=
+document.querySelector(
+".history"
+);
+
+if(!ruta)return;
+
+ruta.innerHTML="";
+
+Object.keys(historik)
+.reverse()
+.forEach(namn=>{
+
+let m=
+historik[namn];
+
+ruta.innerHTML+=`
+
+<div>
+
+<b>${namn}</b><br>
+
+📅 ${m.datum}<br>
+
+🏋️ ${m.vikt} kg<br>
+
+🔁 ${m.reps} reps × ${m.set}
+
+</div>
+
+<hr>
+
+`;
+
+});
+
+}
+
+document
+.querySelector(
+".save"
+)
+?.addEventListener(
+"click",
+sparaTraning
+);
+
+visaHistorik();
 </script>
 </body>
 
