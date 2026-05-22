@@ -217,7 +217,75 @@ alert("Maskin vald 🏋️");
 
 let timer=document.querySelector(".timer");
 
+const maskiner =
+JSON.parse(localStorage.getItem("maskiner")||"[]");
 
+function sparaMaskin(){
+
+let namn=
+prompt("Maskinnamn");
+
+if(!namn)return;
+
+let data={
+maskin:namn,
+reps:10,
+set:3,
+vikt:"",
+datum:new Date()
+.toLocaleDateString("sv-SE")
+};
+
+maskiner.push(data);
+
+localStorage.setItem(
+"maskiner",
+JSON.stringify(maskiner)
+);
+
+alert(
+namn+
+" sparad ✅"
+);
+
+visaHistorik();
+
+}
+
+function visaHistorik(){
+
+let box=
+document.querySelector(".history");
+
+if(!box)return;
+
+box.innerHTML="";
+
+maskiner.forEach(m=>{
+
+box.innerHTML+=`
+
+<div>
+
+<b>${m.maskin}</b><br>
+
+📅 ${m.datum}<br>
+
+🏋️ ${m.vikt||"-"} kg<br>
+
+🔁 ${m.reps} reps × ${m.set}
+
+</div>
+
+<hr>
+
+`;
+
+});
+
+}
+
+visaHistorik();
 </script>
 </body>
 
