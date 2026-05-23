@@ -1,374 +1,91 @@
-<!DOCTYPE html>
-<html lang="sv">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>MyWorkout V2</title>
-
-<style>
-
-body{
-margin:0;
-background:#0b1320;
-color:white;
-font-family:-apple-system,sans-serif;
-}
-
-header{
-padding:30px;
-text-align:center;
-}
-
-.card{
-background:#152238;
-margin:14px;
-padding:20px;
-border-radius:20px;
-}
-
-button{
-width:100%;
-padding:18px;
-border:none;
-border-radius:14px;
-font-size:18px;
-font-weight:bold;
-margin-top:10px;
-cursor:pointer;
-}
-
-.start{
-background:#0ea85d;
-color:white;
-}
-
-.stop{
-background:#d73d3d;
-color:white;
-}
-
-.save{
-background:#2563eb;
-color:white;
-}
-
-input,select{
-width:100%;
-padding:16px;
-border-radius:12px;
-border:none;
-margin-top:10px;
-box-sizing:border-box;
-}
-
-.timer{
-font-size:46px;
-text-align:center;
-margin-top:20px;
-}
-
-.history{
-max-height:300px;
-overflow:auto;
-}
-
-.small{
-opacity:.7;
-font-size:14px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<header>
-<h1>🏋️ MyWorkout V2</h1>
-<div id="today"></div>
-</header>
-
-<div class="card">
-
-
-
-</div>
-
-<div class="card">
-
-<h2>Logga träning</h2>
-
-<input
-placeholder="Lägg till maskin">
-
-<select>
-
-<option>
-Mina maskiner
-</option>
-
-</select>
-
-<input
-value="10"
-placeholder="Reps">
-
-<input
-value="3"
-placeholder="Set">
-
-<input
-placeholder="Vikt">
-
-<button class="save" onclick="sparaMaskin()">
-
-Spara träning
-
-</button>
-
-</div>
-
-<div class="card">
-
-
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Historik</h2>
-
-<div class="history">
-
-Ingen historik ännu
-
-</div>
-
-</div>
-<script>
-
-document.getElementById("today").innerText=
-new Date().toLocaleDateString("sv-SE");
-
-let workoutActive=false;
-
-document.querySelector(".start")
-.onclick=function(){
-
-workoutActive=true;
-
-alert("Pass startat 💪");
-
-};
-
-document.querySelector(".stop")
-.onclick=function(){
-
-if(workoutActive){
-
-alert("Pass avslutat ✅");
-
-workoutActive=false;
-
-}
-
-};
-document.querySelector(".save").onclick=function(){
-
-alert("Träning sparad ✅");
-
-};
-
-document.querySelector("select").onchange=function(){
-
-alert("Maskin vald 🏋️");
-
-};
-
-let timer=document.querySelector(".timer");
-
-const maskiner =
-JSON.parse(localStorage.getItem("maskiner")||"[]");
-
-function sparaMaskin(){
-
-let namn=
-document.querySelector(
-'input[placeholder="Lägg till maskin"]'
-).value;
-if(!namn)return;
-
-let data={
-maskin:namn,
-reps:10,
-set:3,
-vikt:"",
-datum:new Date()
-.toLocaleDateString("sv-SE")
-};
-
-maskiner.push(data);
-
-localStorage.setItem(
-"maskiner",
-JSON.stringify(maskiner)
-);
-
-alert(
-namn+
-" sparad ✅"
-);
-
-visaHistorik();
-
-}
-
-function visaHistorik(){
-
-let box=
-document.querySelector(".history");
-
-if(!box)return;
-
-box.innerHTML="";
-
-maskiner.forEach(m=>{
-
-box.innerHTML+=`
-
-<div>
-
-<b>${m.maskin}</b><br>
-
-📅 ${m.datum}<br>
-
-🏋️ ${m.vikt||"-"} kg<br>
-
-🔁 ${m.reps} reps × ${m.set}
-
-</div>
-
-<hr>
-
-`;
-
-});
-
-}
-
-visaHistorik();
-  const MASKIN_KEY="myworkout_maskiner";
-
-let historik=
-JSON.parse(
-localStorage.getItem(MASKIN_KEY)
-||"{}"
-);
-
-function sparaTraning(){
-
-let maskin=
-document.querySelector(
-'input[placeholder="Lägg till maskin"]'
-)?.value;
-
-let reps=
-document.querySelector(
-'input[placeholder="Reps"]'
-)?.value||10;
-
-let set=
-document.querySelector(
-'input[placeholder="Set"]'
-)?.value||3;
-
-let vikt=
-document.querySelector(
-'input[placeholder="Vikt"]'
-)?.value||"";
-
-if(!maskin){
-alert("Skriv maskin");
-return;
-}
-
-historik[maskin]={
-reps,
-set,
-vikt,
-datum:
-new Date()
-.toLocaleDateString(
-"sv-SE"
-)
-};
-
-localStorage.setItem(
-MASKIN_KEY,
-JSON.stringify(historik)
-);
-
-visaHistorik();
-
-alert("Sparat ✅");
-
-}
-
-function visaHistorik(){
-
-let ruta=
-document.querySelector(
-".history"
-);
-
-if(!ruta)return;
-
-ruta.innerHTML="";
-
-Object.keys(historik)
-.reverse()
-.forEach(namn=>{
-
-let m=
-historik[namn];
-
-ruta.innerHTML+=`
-
-<div>
-
-<b>${namn}</b><br>
-
-📅 ${m.datum}<br>
-
-🏋️ ${m.vikt} kg<br>
-
-🔁 ${m.reps} reps × ${m.set}
-
-</div>
-
-<hr>
-
-`;
-
-});
-
-}
-
-document
-.querySelector(
-".save"
-)
-?.addEventListener(
-"click",
-sparaTraning
-);
-
-visaHistorik();
-</script>
-</body>
-
-</html>
+# MyWorkout2026
+
+Skapa en helt ny app från grunden.
+
+Språk:
+Svenska
+
+Mål:
+En mycket enkel träningsapp som är snabb, enkel och peppande.
+
+SKÄRM 1 – TRÄNING
+
+Visa dagens datum högst upp.
+
+Knappar:
+- Ny träning
+- Upprepa senaste pass
+
+SEKTION MASKINER
+- Dropdown med tidigare sparade maskiner
+- Möjlighet att skriva ny maskin
+- Fält:
+  Kg
+  Reps
+  Set
+- Visa senaste sparade värden automatiskt
+- Tillåt ändring
+- Spara senaste värden
+- Flera maskiner per träningspass
+- Swipe vänster → visa papperskorg → radera
+- Historik ska inte tas bort
+
+SEKTION AKTIVITETER
+- Dropdown med tidigare sparade aktiviteter
+- Möjlighet att skriva ny aktivitet
+- Fält:
+  Minuter
+- Visa senaste sparade minuter
+- Tillåt ändring
+- Spara senaste värden
+- Flera aktiviteter per träningspass
+- Swipe vänster → papperskorg → radera
+- Historik ska inte tas bort
+
+SPARA
+- Flera träningar samma dag
+- Spara historik
+- Spara senaste värden
+
+UPPREPA SENASTE PASS
+Val:
+- Upprepa allt
+- Bara maskiner
+- Bara aktiviteter
+
+Användaren ska kunna ändra innan sparning.
+
+SKÄRM 2 – HISTORIK
+
+Visa scrollbar.
+
+Kompakt lista.
+
+Exempel:
+23 Maj 2026 Abductor 15kg
+23 Maj 2026 Promenad 35min
+22 Maj 2026 Cross Training 60min
+
+Tryck på rad:
+Visa detaljer.
+
+SKÄRM 3 – UTVECKLING
+
+Maskiner:
+- Senaste kg
+- Högsta kg
+
+Aktiviteter:
+- Senaste minuter
+- Längsta tid
+
+PEPP
+- Personbästa
+- Tränat X dagar
+
+TEKNISKT
+- Mobilanpassad
+- Enkel design
+- Lokal lagring
+- Ingen inloggning
+- Bygg hela projektstrukturen från grunden
