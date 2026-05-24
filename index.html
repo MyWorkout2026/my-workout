@@ -43,7 +43,7 @@ margin-bottom:10px;
 <body>
 
 <h1>🏋️ MyWorkout</h1>
-
+<p id="today"></p>
 <h3>Maskiner</h3>
 
 <select
@@ -384,7 +384,8 @@ a
 }
 
 function render(){
-
+document.getElementById("today").innerHTML =
+new Date().toLocaleDateString("sv-SE")
 document
 .getElementById(
 "machineSelect"
