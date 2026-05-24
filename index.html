@@ -8,9 +8,66 @@
 
 <h1>🏋️ MyWorkout</h1>
 
-<p>Välkommen!</p>
+<input id="machine" placeholder="Maskin">
+<br><br>
 
-<button>Ny träning</button>
+<input id="weight" type="number" placeholder="Vikt">
+<br><br>
+
+<button onclick="saveWorkout()">
+Spara träning
+</button>
+
+<h2>Mina träningar</h2>
+
+<div id="list"></div>
+
+<script>
+
+let workouts =
+JSON.parse(
+localStorage.getItem("workouts")
+) || [];
+
+show();
+
+function saveWorkout(){
+
+const machine =
+document.getElementById("machine").value;
+
+const weight =
+document.getElementById("weight").value;
+
+workouts.push({
+machine,
+weight
+});
+
+localStorage.setItem(
+"workouts",
+JSON.stringify(workouts)
+);
+
+show();
+
+}
+
+function show(){
+
+document.getElementById(
+"list"
+).innerHTML = workouts
+.map(
+w =>
+`<p>${w.machine}
+- ${w.weight} kg</p>`
+)
+.join("");
+
+}
+
+</script>
 
 </body>
 </html>
