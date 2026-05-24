@@ -199,7 +199,14 @@ value(
 };
 
 
-
+data.history.unshift({
+date:new Date().toLocaleDateString("sv-SE"),
+machine:machine,
+weight:value("weight"),
+sets:value("sets"),
+reps:value("reps"),
+setting:value("setting")
+});
 save();
 clear();
 render();
