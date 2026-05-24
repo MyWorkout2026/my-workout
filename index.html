@@ -4,30 +4,64 @@
 <head>
 <title>MyWorkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+padding:20px;
+font-family:sans-serif;
+}
+
+.card{
+padding:12px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+input,
+button{
+padding:10px;
+margin-bottom:10px;
+width:220px;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <h1>🏋️ MyWorkout</h1>
 
+<h3 id="days"></h3>
+
 <input id="machine" placeholder="Maskin">
 
-<br><br>
+<br>
 
-<input id="weight" type="number" placeholder="Vikt kg">
+<input id="weight"
+type="number"
+placeholder="Vikt kg">
 
-<br><br>
+<br>
 
-<input id="sets" type="number" placeholder="Set">
+<input id="sets"
+type="number"
+placeholder="Set">
 
-<br><br>
+<br>
 
-<input id="reps" type="number" placeholder="Reps">
+<input id="reps"
+type="number"
+placeholder="Reps">
 
-<br><br>
+<br>
 
 <button onclick="saveWorkout()">
+
 Spara träning
+
 </button>
 
 <h2>Mina träningar</h2>
@@ -48,39 +82,30 @@ show();
 function saveWorkout(){
 
 const machine=
-document.getElementById(
-"machine"
-).value;
+machineInput();
 
 const weight=
-document.getElementById(
-"weight"
-).value;
+value("weight");
 
 const sets=
-document.getElementById(
-"sets"
-).value;
+value("sets");
 
 const reps=
-document.getElementById(
-"reps"
-).value;
+value("reps");
 
 if(
 !machine||
 !weight
 )return;
 
-const today=
+workouts.unshift({
+
+date:
 new Date()
 .toLocaleDateString(
 "sv-SE"
-);
+),
 
-workouts.unshift({
-
-date:today,
 machine,
 weight,
 sets,
@@ -88,35 +113,69 @@ reps
 
 });
 
-localStorage.setItem(
-"workouts",
-JSON.stringify(
-workouts
-)
-);
+save();
 
-document
-.querySelectorAll(
-"input"
-)
-.forEach(
-x=>x.value=""
-);
+clear();
 
 show();
 
 }
 
-function removeWorkout(i){
+function value(id){
 
-workouts.splice(i,1);
+return document
+.getElementById(
+id
+)
+.value;
+
+}
+
+function machineInput(){
+
+return value(
+"machine"
+);
+
+}
+
+function save(){
 
 localStorage.setItem(
 "workouts",
+
 JSON.stringify(
 workouts
 )
+
 );
+
+}
+
+function clear(){
+
+document
+.querySelectorAll(
+"input"
+)
+
+.forEach(
+
+x=>
+x.value=""
+
+);
+
+}
+
+function removeWorkout(i){
+
+workouts.splice(
+i,
+1
+);
+
+save();
 
 show();
 
@@ -124,27 +183,52 @@ show();
 
 function show(){
 
+const days=
+
+[
+...new Set(
+
+workouts.map(
+x=>
+x.date
+)
+
+)
+
+];
+
+document
+.getElementById(
+"days"
+)
+
+.innerHTML=
+
+`📅 Träningsdagar:
+${days.length}`;
+
 document
 .getElementById(
 "list"
 )
+
 .innerHTML=
 
 workouts
+
 .map(
+
 (w,i)=>
 
 `
 
-<div>
-
-<p>
+<div class="card">
 
 <b>
-${w.date}
-</b>
 
-</p>
+${w.date}
+
+</b>
 
 <p>
 
@@ -164,17 +248,16 @@ ${w.sets}×${w.reps}
 onclick=
 "removeWorkout(${i})">
 
-🗑️ Radera
+🗑️
 
 </button>
-
-<hr>
 
 </div>
 
 `
 
 )
+
 .join("");
 
 }
