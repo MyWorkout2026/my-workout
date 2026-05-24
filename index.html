@@ -12,8 +12,8 @@ content="width=device-width, initial-scale=1">
 <style>
 
 body{
-font-family:sans-serif;
 padding:20px;
+font-family:sans-serif;
 }
 
 input,
@@ -30,11 +30,9 @@ margin-bottom:10px;
 
 border:1px solid #ddd;
 
-padding:12px;
+padding:10px;
 
 margin-bottom:10px;
-
-border-radius:10px;
 
 }
 
@@ -44,22 +42,23 @@ border-radius:10px;
 
 <body>
 
-<h1>
-🏋️ MyWorkout
-</h1>
+<h1>🏋️ MyWorkout</h1>
 
-<h3>
-Maskiner
-</h3>
+<h3>Maskiner</h3>
+
+<select
+id="machineSelect"
+onchange="fillMachine()">
+
+<option>
+Välj maskin
+</option>
+
+</select>
 
 <input
 id="machine"
-list="machines"
-placeholder="Ny eller välj maskin">
-
-<datalist
-id="machines">
-</datalist>
+placeholder="Ny maskin">
 
 <input
 id="weight"
@@ -83,18 +82,23 @@ Spara maskin
 
 </button>
 
-<h3>
-Aktiviteter
-</h3>
+<h3>Aktiviteter</h3>
+
+<select
+id="activitySelect"
+onchange="fillActivity()">
+
+<option>
+
+Välj aktivitet
+
+</option>
+
+</select>
 
 <input
 id="activity"
-list="activities"
-placeholder="Ny eller välj aktivitet">
-
-<datalist
-id="activities">
-</datalist>
+placeholder="Ny aktivitet">
 
 <input
 id="minutes"
@@ -108,9 +112,7 @@ Spara aktivitet
 
 </button>
 
-<h2>
-Historik
-</h2>
+<h2>Historik</h2>
 
 <div
 id="list">
@@ -125,6 +127,7 @@ JSON.parse(
 localStorage
 .getItem(
 "myworkout"
+
 )
 
 )
@@ -133,8 +136,10 @@ localStorage
 
 {
 
-machines:[],
-activities:[],
+machines:{},
+
+activities:{},
+
 history:[]
 
 };
@@ -159,6 +164,7 @@ data
 function saveMachine(){
 
 const machine=
+
 value(
 "machine"
 );
@@ -166,13 +172,40 @@ value(
 if(!machine)
 return;
 
-const item={
+data
+.machines[
+machine
+]={
+
+weight:
+value(
+"weight"
+),
+
+sets:
+value(
+"sets"
+),
+
+reps:
+value(
+"reps"
+)
+
+};
+
+data
+.history
+.unshift({
 
 date:
 
 new Date()
+
 .toLocaleDateString(
+
 "sv-SE"
+
 ),
 
 machine,
@@ -192,34 +225,13 @@ value(
 "reps"
 )
 
-};
-
-data.history
-.unshift(
-item
-);
-
-if(
-
-!data
-.machines
-.includes(
-machine
-)
-
-)
-
-data
-.machines
-.push(
-machine
-);
+});
 
 save();
 
-clear();
-
 render();
+
+clear();
 
 }
 
@@ -230,18 +242,35 @@ value(
 "activity"
 );
 
-if(
-!activity
-)
+if(!activity)
 return;
 
-const item={
+data
+.activities[
+activity
+]={
+
+minutes:
+
+value(
+"minutes"
+
+)
+
+};
+
+data
+.history
+.unshift({
 
 date:
 
 new Date()
+
 .toLocaleDateString(
+
 "sv-SE"
+
 ),
 
 activity,
@@ -250,62 +279,108 @@ minutes:
 
 value(
 "minutes"
-)
-
-};
-
-data.history
-.unshift(
-item
-);
-
-if(
-
-!data
-.activities
-.includes(
-activity
-)
 
 )
 
-data
-.activities
-.push(
-activity
-);
+});
 
 save();
 
-clear();
-
 render();
 
+clear();
+
 }
 
-function value(id){
+function fillMachine(){
 
-return document
-.getElementById(
-id
+const m=
+
+value(
+"machineSelect"
+);
+
+if(
+!data
+.machines[
+m
+]
 )
-.value;
-
-}
-
-function clear(){
+return;
 
 document
-.querySelectorAll(
-"input"
+.getElementById(
+"machine"
 )
+.value=m;
 
-.forEach(
+document
+.getElementById(
+"weight"
+)
+.value=
+data
+.machines[
+m
+]
+.weight;
 
-x=>
-x.value=""
+document
+.getElementById(
+"sets"
+)
+.value=
+data
+.machines[
+m
+]
+.sets;
 
+document
+.getElementById(
+"reps"
+)
+.value=
+data
+.machines[
+m
+]
+.reps;
+
+}
+
+function fillActivity(){
+
+const a=
+value(
+"activitySelect"
 );
+
+if(
+!data
+.activities[
+a
+]
+)
+return;
+
+document
+.getElementById(
+"activity"
+)
+.value=a;
+
+document
+.getElementById(
+"minutes"
+)
+.value=
+
+data
+.activities[
+a
+]
+.minutes;
 
 }
 
@@ -313,13 +388,20 @@ function render(){
 
 document
 .getElementById(
-"machines"
+"machineSelect"
 )
 
 .innerHTML=
 
+"<option>Välj maskin</option>"+
+
+Object
+.keys(
+
 data
 .machines
+
+)
 
 .map(
 
@@ -337,13 +419,20 @@ ${x}
 
 document
 .getElementById(
-"activities"
+"activitySelect"
 )
 
 .innerHTML=
 
+"<option>Välj aktivitet</option>"+
+
+Object
+.keys(
+
 data
 .activities
+
+)
 
 .map(
 
@@ -414,6 +503,32 @@ ${x.minutes}min`
 )
 
 .join("");
+
+}
+
+function clear(){
+
+document
+.querySelectorAll(
+"input"
+)
+
+.forEach(
+
+x=>
+x.value=""
+
+);
+
+}
+
+function value(id){
+
+return document
+.getElementById(
+id
+)
+.value;
 
 }
 
