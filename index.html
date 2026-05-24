@@ -173,9 +173,7 @@ if(!machine)
 return;
 
 data
-.machines[
-machine
-]={
+data.machines.push({
 
 weight:
 value(
@@ -228,11 +226,8 @@ value(
 });
 
 save();
-
-render();
-
 clear();
-
+render();
 }
 
 function saveActivity(){
