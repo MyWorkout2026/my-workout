@@ -2,16 +2,24 @@
 <html>
 <head>
 <title>MyWorkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
 <h1>🏋️ MyWorkout</h1>
 
-<input id="machine" placeholder="Maskin">
+<input
+id="machine"
+placeholder="Maskin">
+
 <br><br>
 
-<input id="weight" type="number" placeholder="Vikt">
+<input
+id="weight"
+type="number"
+placeholder="Vikt kg">
+
 <br><br>
 
 <button onclick="saveWorkout()">
@@ -26,7 +34,9 @@ Spara träning
 
 let workouts =
 JSON.parse(
-localStorage.getItem("workouts")
+localStorage.getItem(
+"workouts"
+)
 ) || [];
 
 show();
@@ -34,10 +44,22 @@ show();
 function saveWorkout(){
 
 const machine =
-document.getElementById("machine").value;
+document.getElementById(
+"machine"
+).value;
 
 const weight =
-document.getElementById("weight").value;
+document.getElementById(
+"weight"
+).value;
+
+if(
+machine === ""
+||
+weight === ""
+){
+return;
+}
 
 workouts.push({
 machine,
@@ -46,8 +68,18 @@ weight
 
 localStorage.setItem(
 "workouts",
-JSON.stringify(workouts)
+JSON.stringify(
+workouts
+)
 );
+
+document.getElementById(
+"machine"
+).value="";
+
+document.getElementById(
+"weight"
+).value="";
 
 show();
 
@@ -57,11 +89,15 @@ function show(){
 
 document.getElementById(
 "list"
-).innerHTML = workouts
+).innerHTML =
+workouts
 .map(
-w =>
-`<p>${w.machine}
-- ${w.weight} kg</p>`
+w=>
+`<p>
+${w.machine}
+—
+${w.weight} kg
+</p>`
 )
 .join("");
 
