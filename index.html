@@ -337,7 +337,7 @@ function deleteMachine(){
 
 const m=value("machineSelect")
 
-if(!m) return
+if(!m || m==="Välj maskin") return
 
 delete data.machines[m]
 
