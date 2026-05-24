@@ -97,7 +97,7 @@ Välj aktivitet
 </option>
 
 </select>
-
+<button onclick="deleteActivity()">🗑 Ta bort aktivitet</button>
 <input
 id="activity"
 placeholder="Ny aktivitet">
@@ -382,7 +382,21 @@ a
 .minutes;
 
 }
+function deleteActivity(){
 
+const a=value("activitySelect")
+
+if(!a) return
+
+delete data.activities[a]
+
+save()
+
+render()
+
+clear()
+
+}
 function render(){
 document.getElementById("today").innerHTML =
 new Date().toLocaleDateString("sv-SE");
