@@ -2,28 +2,40 @@
 <html>
 
 <head>
+
 <title>MyWorkout</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
 
 <style>
 
 body{
-padding:20px;
 font-family:sans-serif;
-}
-
-.card{
-padding:12px;
-margin-bottom:10px;
-border:1px solid #ddd;
-border-radius:10px;
+padding:20px;
 }
 
 input,
+select,
 button{
-padding:10px;
+
+width:100%;
+padding:12px;
 margin-bottom:10px;
-width:220px;
+
+}
+
+.card{
+
+border:1px solid #ddd;
+
+padding:12px;
+
+margin-bottom:10px;
+
+border-radius:10px;
+
 }
 
 </style>
@@ -32,92 +44,242 @@ width:220px;
 
 <body>
 
-<h1>🏋️ MyWorkout</h1>
+<h1>
+🏋️ MyWorkout
+</h1>
 
-<h3 id="days"></h3>
+<h3>
+Maskiner
+</h3>
 
-<input id="machine" placeholder="Maskin">
+<input
+id="machine"
+list="machines"
+placeholder="Ny eller välj maskin">
 
-<br>
+<datalist
+id="machines">
+</datalist>
 
-<input id="weight"
+<input
+id="weight"
 type="number"
-placeholder="Vikt kg">
+placeholder="Kg">
 
-<br>
-
-<input id="sets"
+<input
+id="sets"
 type="number"
 placeholder="Set">
 
-<br>
-
-<input id="reps"
+<input
+id="reps"
 type="number"
 placeholder="Reps">
 
-<br>
+<button
+onclick="saveMachine()">
 
-<button onclick="saveWorkout()">
-
-Spara träning
+Spara maskin
 
 </button>
 
-<h2>Mina träningar</h2>
+<h3>
+Aktiviteter
+</h3>
 
-<div id="list"></div>
+<input
+id="activity"
+list="activities"
+placeholder="Ny eller välj aktivitet">
+
+<datalist
+id="activities">
+</datalist>
+
+<input
+id="minutes"
+type="number"
+placeholder="Minuter">
+
+<button
+onclick="saveActivity()">
+
+Spara aktivitet
+
+</button>
+
+<h2>
+Historik
+</h2>
+
+<div
+id="list">
+</div>
 
 <script>
 
-let workouts=
+let data=
+
 JSON.parse(
-localStorage.getItem(
-"workouts"
+
+localStorage
+.getItem(
+"myworkout"
 )
-)||[];
 
-show();
+)
 
-function saveWorkout(){
+||
+
+{
+
+machines:[],
+activities:[],
+history:[]
+
+};
+
+render();
+
+function save(){
+
+localStorage
+.setItem(
+
+"myworkout",
+
+JSON.stringify(
+data
+)
+
+);
+
+}
+
+function saveMachine(){
 
 const machine=
-machineInput();
+value(
+"machine"
+);
 
-const weight=
-value("weight");
+if(!machine)
+return;
 
-const sets=
-value("sets");
-
-const reps=
-value("reps");
-
-if(
-!machine||
-!weight
-)return;
-
-workouts.unshift({
+const item={
 
 date:
+
 new Date()
 .toLocaleDateString(
 "sv-SE"
 ),
 
 machine,
-weight,
-sets,
-reps
 
-});
+weight:
+value(
+"weight"
+),
+
+sets:
+value(
+"sets"
+),
+
+reps:
+value(
+"reps"
+)
+
+};
+
+data.history
+.unshift(
+item
+);
+
+if(
+
+!data
+.machines
+.includes(
+machine
+)
+
+)
+
+data
+.machines
+.push(
+machine
+);
 
 save();
 
 clear();
 
-show();
+render();
+
+}
+
+function saveActivity(){
+
+const activity=
+value(
+"activity"
+);
+
+if(
+!activity
+)
+return;
+
+const item={
+
+date:
+
+new Date()
+.toLocaleDateString(
+"sv-SE"
+),
+
+activity,
+
+minutes:
+
+value(
+"minutes"
+)
+
+};
+
+data.history
+.unshift(
+item
+);
+
+if(
+
+!data
+.activities
+.includes(
+activity
+)
+
+)
+
+data
+.activities
+.push(
+activity
+);
+
+save();
+
+clear();
+
+render();
 
 }
 
@@ -128,27 +290,6 @@ return document
 id
 )
 .value;
-
-}
-
-function machineInput(){
-
-return value(
-"machine"
-);
-
-}
-
-function save(){
-
-localStorage.setItem(
-"workouts",
-
-JSON.stringify(
-workouts
-)
-
-);
 
 }
 
@@ -168,44 +309,55 @@ x.value=""
 
 }
 
-function removeWorkout(i){
-
-workouts.splice(
-i,
-1
-);
-
-save();
-
-show();
-
-}
-
-function show(){
-
-const days=
-
-[
-...new Set(
-
-workouts.map(
-x=>
-x.date
-)
-
-)
-
-];
+function render(){
 
 document
 .getElementById(
-"days"
+"machines"
 )
 
 .innerHTML=
 
-`📅 Träningsdagar:
-${days.length}`;
+data
+.machines
+
+.map(
+
+x=>
+
+`<option>
+
+${x}
+
+</option>`
+
+)
+
+.join("");
+
+document
+.getElementById(
+"activities"
+)
+
+.innerHTML=
+
+data
+.activities
+
+.map(
+
+x=>
+
+`<option>
+
+${x}
+
+</option>`
+
+)
+
+.join("");
 
 document
 .getElementById(
@@ -214,43 +366,46 @@ document
 
 .innerHTML=
 
-workouts
+data
+.history
 
 .map(
 
-(w,i)=>
+x=>
 
 `
 
-<div class="card">
+<div
+class=
+card>
 
 <b>
 
-${w.date}
+${x.date}
 
 </b>
 
-<p>
+<br>
 
-${w.machine}
+${
 
+x.machine
+
+?
+
+`${x.machine}
 •
-
-${w.weight} kg
-
+${x.weight}kg
 •
+${x.sets}×${x.reps}`
 
-${w.sets}×${w.reps}
+:
 
-</p>
+`${x.activity}
+•
+${x.minutes}min`
 
-<button
-onclick=
-"removeWorkout(${i})">
-
-🗑️
-
-</button>
+}
 
 </div>
 
