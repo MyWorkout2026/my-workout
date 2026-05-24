@@ -401,18 +401,7 @@ clear()
 function render(){
 document.getElementById("today").innerHTML =
 new Date().toLocaleDateString("sv-SE");
-const m=value("machineSelect");
 
-if(
-m &&
-data.machines[m]
-){
-document.getElementById("pr").innerHTML=
-"🏆 PR: "+data.machines[m].weight+" kg"
-}
-else{
-document.getElementById("pr").innerHTML="";
-}
 document
 .getElementById(
 "machineSelect"
