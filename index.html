@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>MyWorkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,16 +10,19 @@
 
 <h1>🏋️ MyWorkout</h1>
 
-<input
-id="machine"
-placeholder="Maskin">
+<input id="machine" placeholder="Maskin">
 
 <br><br>
 
-<input
-id="weight"
-type="number"
-placeholder="Vikt kg">
+<input id="weight" type="number" placeholder="Vikt kg">
+
+<br><br>
+
+<input id="sets" type="number" placeholder="Set">
+
+<br><br>
+
+<input id="reps" type="number" placeholder="Reps">
 
 <br><br>
 
@@ -32,38 +36,56 @@ Spara träning
 
 <script>
 
-let workouts =
+let workouts=
 JSON.parse(
 localStorage.getItem(
 "workouts"
 )
-) || [];
+)||[];
 
 show();
 
 function saveWorkout(){
 
-const machine =
+const machine=
 document.getElementById(
 "machine"
 ).value;
 
-const weight =
+const weight=
 document.getElementById(
 "weight"
 ).value;
 
-if(
-machine === ""
-||
-weight === ""
-){
-return;
-}
+const sets=
+document.getElementById(
+"sets"
+).value;
 
-workouts.push({
+const reps=
+document.getElementById(
+"reps"
+).value;
+
+if(
+!machine||
+!weight
+)return;
+
+const today=
+new Date()
+.toLocaleDateString(
+"sv-SE"
+);
+
+workouts.unshift({
+
+date:today,
 machine,
-weight
+weight,
+sets,
+reps
+
 });
 
 localStorage.setItem(
@@ -73,13 +95,28 @@ workouts
 )
 );
 
-document.getElementById(
-"machine"
-).value="";
+document
+.querySelectorAll(
+"input"
+)
+.forEach(
+x=>x.value=""
+);
 
-document.getElementById(
-"weight"
-).value="";
+show();
+
+}
+
+function removeWorkout(i){
+
+workouts.splice(i,1);
+
+localStorage.setItem(
+"workouts",
+JSON.stringify(
+workouts
+)
+);
 
 show();
 
@@ -87,17 +124,56 @@ show();
 
 function show(){
 
-document.getElementById(
+document
+.getElementById(
 "list"
-).innerHTML =
+)
+.innerHTML=
+
 workouts
 .map(
-w=>
-`<p>
+(w,i)=>
+
+`
+
+<div>
+
+<p>
+
+<b>
+${w.date}
+</b>
+
+</p>
+
+<p>
+
 ${w.machine}
-—
+
+•
+
 ${w.weight} kg
-</p>`
+
+•
+
+${w.sets}×${w.reps}
+
+</p>
+
+<button
+onclick=
+"removeWorkout(${i})">
+
+🗑️ Radera
+
+</button>
+
+<hr>
+
+</div>
+
+`
+
 )
 .join("");
 
@@ -106,4 +182,5 @@ ${w.weight} kg
 </script>
 
 </body>
+
 </html>
