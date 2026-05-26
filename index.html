@@ -55,40 +55,44 @@ Välj maskin
 </option>
 
 </select>
-<button onclick="deleteMachine()">🗑 Ta bort maskin</button>
+<button onclick="deleteMachine()">
+🗑 Ta bort maskin
+</button>
+
 <input
 id="machine"
 placeholder="Ny maskin">
 
 <input
-id="weight"
-type="number"
-placeholder="Kg">
-<button class="save">
-Spara träning
-</button>
-
-<div class="history"></div>
-<p id="pr"></p>
-<input
 id="sets"
 type="number"
+value="3"
 placeholder="Set">
 
 <input
 id="reps"
 type="number"
+value="10"
 placeholder="Reps">
+
 <input
-id="setting"
-placeholder="Inställning">
-<button
-onclick="saveMachine()">
+id="weight"
+type="number"
+placeholder="Kg">
 
+<button onclick="saveMachine()">
 Spara maskin
-
 </button>
 
+<button onclick="saveTraining()">
+Spara träning
+</button>
+
+<p id="today"></p>
+
+<div class="history">
+Historik visas här
+</div>
 <h3>Aktiviteter</h3>
 
 <select
